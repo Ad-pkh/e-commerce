@@ -14,7 +14,6 @@ export interface TextInputInterface{
     control: any,
     name:string,
     defaultValue?:string|undefined,
-    required:boolean,
     errMsg?:string|null,
     type?:string,
     row?:number

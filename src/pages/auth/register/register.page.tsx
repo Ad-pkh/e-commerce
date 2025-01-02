@@ -7,7 +7,7 @@ import RegisterImage from "../../../assets/registratrion image.png";
 import { InputLabel, RoleSelectComponent, TextAreaComponent, TextInputComponent } from "../../../components/common/form/input.component";
 import authSvc from "./auth.service";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingComponent from "../../../components/common/loading/loading.component";
 
 
@@ -51,6 +51,29 @@ const RegisterPage = () => {
 
 
     }
+
+    const getLoggedInUser = async () => { 
+        try {
+          const response =await authSvc.getRequest("/auth/me",{auth:true})
+          //console.log(response);
+          toast.info("You are already logged in");
+          navigate("/"+response.result.role)  
+    
+        } catch (exception) {
+          console.log(exception);
+          
+        }
+      }
+      useEffect(() => { 
+        //login check
+        const token=localStorage.getItem("token") || null
+        if (token) {
+          //logged in user 
+          getLoggedInUser()
+          //validate token
+        }
+        
+      }, [])
     return (<>
 
         <section className="bg-teal-200">

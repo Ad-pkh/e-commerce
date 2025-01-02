@@ -1,20 +1,56 @@
 import { Navbar } from "flowbite-react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import authSvc from "../../../pages/auth/register/auth.service";
 
-export const HomeHeader=()=>{
-    return(<>
-    
-    <Navbar fluid rounded className=" bg-slate-100 shadow-md px-3">
-    <Navbar.Brand href="https://media1.tenor.com/m/DdjMYNm3A7UAAAAd/k-cha-hajur-k-xa.gif">
-        <img src="https://imgs.search.brave.com/q9vGBRKy6tVCbjFWfuoXxwohvtVznddVepchL8TrF24/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nb2dlbmllLm5l/dC9pbWFnZXMvZXhl/bXBsZXMvZW4vZWR1/Y2F0aW9uLWxvZ28u/cG5n" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
-    </Navbar.Brand>
-    <div className=" flex md:order-2">
-    <Navbar.Collapse className=" me-5">
-            <NavLink to="/register"className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>Register</NavLink>
-            <NavLink to="/login"className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>Login</NavLink>
-        </Navbar.Collapse>
-        
-        {/* <Dropdown
+export const HomeHeader = () => {
+    let [loggedInUser, setLoggedInUser] = useState({} as any);
+    const getLoggedInUser = async () => {
+        try {
+            const response = await authSvc.getRequest("/auth/me", { auth: true })
+            //console.log(response);
+            setLoggedInUser(response.result)
+        } catch (exception) {
+            console.log(exception);
+
+        }
+    }
+    useEffect(() => {
+        //login check
+        const token = localStorage.getItem("token") || null
+        if (token) {
+            //logged in user 
+            getLoggedInUser()
+            //validate token
+        }
+
+    }, [])
+    return (<>
+
+        <Navbar fluid rounded className=" bg-slate-100 shadow-md px-3">
+            <Navbar.Brand href="https://media1.tenor.com/m/DdjMYNm3A7UAAAAd/k-cha-hajur-k-xa.gif">
+                <img src="https://imgs.search.brave.com/q9vGBRKy6tVCbjFWfuoXxwohvtVznddVepchL8TrF24/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nb2dlbmllLm5l/dC9pbWFnZXMvZXhl/bXBsZXMvZW4vZWR1/Y2F0aW9uLWxvZ28u/cG5n" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
+            </Navbar.Brand>
+            <div className=" flex md:order-2">
+                <Navbar.Collapse className=" me-5">
+                    {loggedInUser ? <>
+                        <NavLink to={'/'+ loggedInUser.role} className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>
+                        {loggedInUser.name}
+                        </NavLink>
+                        <NavLink to="/logout" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}
+                            >logout</NavLink>
+                    </> : <>
+                            <NavLink to="/register" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}
+                            >Register</NavLink>
+
+                            <NavLink to="/login" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}
+                            >login</NavLink>
+                         
+                        </>
+                    }
+                </Navbar.Collapse>
+
+                {/* <Dropdown
         arrowIcon={false}
         inline
         label={
@@ -31,24 +67,24 @@ export const HomeHeader=()=>{
         <Dropdown.Divider />
         <Dropdown.Item>Sign out</Dropdown.Item>
         </Dropdown> */}
-        <Navbar.Toggle />
-    </div>
+                <Navbar.Toggle />
+            </div>
 
-    <Navbar.Collapse>
-        <NavLink to="/" className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>
-        Home
-        </NavLink>
-        <NavLink to="/about" className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-black bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>About</NavLink>
+            <Navbar.Collapse>
+                <NavLink to="/" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>
+                    Home
+                </NavLink>
+                <NavLink to="/about" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-black bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>About</NavLink>
 
-        <NavLink to="/categories"className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>Categories</NavLink>
+                <NavLink to="/categories" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>Categories</NavLink>
 
-        <NavLink to="/products"className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>All Products</NavLink>
-        <NavLink to="/contact"className={({isActive}:{isActive:boolean})=> isActive? `md:text-cyan-700`:`md:text-gray-700`+`block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>Contact</NavLink>
-       
-    </Navbar.Collapse>
-   
-    
-    </Navbar>
-   
+                <NavLink to="/products" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>All Products</NavLink>
+                <NavLink to="/contact" className={({ isActive }: { isActive: boolean }) => isActive ? `md:text-cyan-700` : `md:text-gray-700` + `block py-2 px-3 text-gray-700 bg-cyan-700 rounded md:bg-transparent md:p-0 dark:text-white md:dark:text-gray-500`}>Contact</NavLink>
+
+            </Navbar.Collapse>
+
+
+        </Navbar>
+
     </>)
 }

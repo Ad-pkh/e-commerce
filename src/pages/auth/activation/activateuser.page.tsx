@@ -34,19 +34,23 @@ const UserActivation = () => {
     const ResendToken = async () => {
         try {
             await authSvc.getRequest("/auth/resend-activationtoken/" + params.token);
-            setMsg("A new token has been send to your registered email.")
-            setLoading(false);
-            setOpenModal(false);
+            setMsg("A new token has been sent to your registered email.")
+            
         } catch (exception) {
             toast.error("Error sending activation token ");
 
+        } finally {
+            setOpenModal(false);
+            setLoading(false);  
         }
+
     }
 
     useEffect(() => {
         //api 
         activateuser()
-    }, [])
+    },
+    )
     return (<>
         <section className="bg-teal-200">
             <div className="flex items-center justify-center min-h-screen px-8  sm:px-12  lg:px-16 ">

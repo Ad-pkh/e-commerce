@@ -8,7 +8,18 @@ abstract class HttpService{
 
     private setHeaders =(config:HeaderConfigProps)=>{
         if (config && config.auth){
-            //tofo: loginn token
+            // loginn token
+            const token = localStorage.getItem("token") || null;
+            if (!token) {
+                throw {message:"Login required"}
+            } else {
+                this.headers = {
+                    ...this.headers,
+                    Authorization: `Bearer ${token}`,
+                }
+                    
+            }
+
         }if(config && config.file){
             this.headers={
                 ...this.headers,
@@ -30,6 +41,7 @@ abstract class HttpService{
 
     getRequest = async (url: string, config: any = null) => {
         this.setHeaders(config);
+
         
         const response = await axiosInstance.get(url, {
             
