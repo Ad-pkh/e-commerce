@@ -1,30 +1,32 @@
 import { Navbar } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import authSvc from "../../../pages/auth/register/auth.service";
+import AuthContext from "../../../context/auth.context";
 
 export const HomeHeader = () => {
-    let [loggedInUser, setLoggedInUser] = useState({} as any);
-    const getLoggedInUser = async () => {
-        try {
-            const response = await authSvc.getRequest("/auth/me", { auth: true })
-            //console.log(response);
-            setLoggedInUser(response.result)
-        } catch (exception) {
-            console.log(exception);
+    // let [loggedInUser, setLoggedInUser] = useState({} as any);
+    // const getLoggedInUser = async () => {
+    //     try {
+    //         const response = await authSvc.getRequest("/auth/me", { auth: true })
+    //         //console.log(response);
+    //         setLoggedInUser(response.result)
+    //     } catch (exception) {
+    //         console.log(exception);
 
-        }
-    }
-    useEffect(() => {
-        //login check
-        const token = localStorage.getItem("token") || null
-        if (token) {
-            //logged in user 
-            getLoggedInUser()
-            //validate token
-        }
+    //     }
+    // }
+    // useEffect(() => {
+    //     //login check
+    //     const token = localStorage.getItem("token") || null
+    //     if (token) {
+    //         //logged in user 
+    //         getLoggedInUser()
+    //         //validate token
+    //     }
 
-    }, [])
+    // }, [])
+    const loggedInUser: any=useContext(AuthContext);
     return (<>
 
         <Navbar fluid rounded className=" bg-slate-100 shadow-md px-3">

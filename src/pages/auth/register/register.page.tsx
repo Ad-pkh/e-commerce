@@ -7,8 +7,9 @@ import RegisterImage from "../../../assets/registratrion image.png";
 import { InputLabel, RoleSelectComponent, TextAreaComponent, TextInputComponent } from "../../../components/common/form/input.component";
 import authSvc from "./auth.service";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingComponent from "../../../components/common/loading/loading.component";
+import AuthContext from "../../../context/auth.context";
 
 
 const RegisterPage = () => {
@@ -52,28 +53,39 @@ const RegisterPage = () => {
 
     }
 
-    const getLoggedInUser = async () => { 
-        try {
-          const response =await authSvc.getRequest("/auth/me",{auth:true})
-          //console.log(response);
-          toast.info("You are already logged in");
-          navigate("/"+response.result.role)  
+    // const getLoggedInUser = async () => { 
+    //     try {
+    //       const response =await authSvc.getRequest("/auth/me",{auth:true})
+    //       //console.log(response);
+    //       toast.info("You are already logged in");
+    //       navigate("/"+response.result.role)  
     
-        } catch (exception) {
-          console.log(exception);
+    //     } catch (exception) {
+    //       console.log(exception);
           
-        }
-      }
-      useEffect(() => { 
-        //login check
-        const token=localStorage.getItem("token") || null
-        if (token) {
-          //logged in user 
-          getLoggedInUser()
-          //validate token
-        }
+    //     }
+    //   }
+    //   useEffect(() => { 
+    //     //login check
+    //     const token=localStorage.getItem("token") || null
+    //     if (token) {
+    //       //logged in user 
+    //       getLoggedInUser()
+    //       //validate token
+    //     }
         
-      }, [])
+    //   }, [])
+    
+      //fetching loggedin user through context
+      
+      const loggedInUser = useContext(AuthContext)  
+  useEffect(() => {
+    if (loggedInUser) {
+      toast.info("You are already logged in");
+      navigate("/"+loggedInUser.role)  
+    }
+  }, [loggedInUser]) 
+    
     return (<>
 
         <section className="bg-teal-200">

@@ -7,7 +7,8 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import authSvc from "../register/auth.service";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../../../context/auth.context";
 
 const LoginPage = () => {
   const LoginDTO = Yup.object({
@@ -22,28 +23,37 @@ const LoginPage = () => {
 
   const navigate = useNavigate()
   
-  const getLoggedInUser = async () => { 
-    try {
-      const response =await authSvc.getRequest("/auth/me",{auth:true})
-      //console.log(response);
-      toast.info("You are already logged in");
-      navigate("/"+response.result.role)  
+  // const getLoggedInUser = async () => { 
+  //   try {
+  //     const response =await authSvc.getRequest("/auth/me",{auth:true})
+  //     //console.log(response);
+  //     toast.info("You are already logged in");
+  //     navigate("/"+response.result.role)  
 
-    } catch (exception) {
-      console.log(exception);
+  //   } catch (exception) {
+  //     console.log(exception);
       
-    }
-  }
-  useEffect(() => { 
-    //login check
-    const token=localStorage.getItem("token") || null
-    if (token) {
-      //logged in user 
-      getLoggedInUser()
-      //validate token
-    }
+  //   }
+  // }
+  // useEffect(() => { 
+  //   //login check
+  //   const token=localStorage.getItem("token") || null
+  //   if (token) {
+  //     //logged in user 
+  //     getLoggedInUser()
+  //     //validate token
+  //   }
     
-  }, [])
+  // }, [])
+  
+  //fetching loggedin user through context
+  const loggedInUser = useContext(AuthContext)  
+  useEffect(() => {
+    if (loggedInUser) {
+      toast.info("You are already logged in");
+      navigate("/"+loggedInUser.role)  
+    }
+  }, [loggedInUser])  
 
   const login = async (data: any) => {
     try {
