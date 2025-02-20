@@ -26,7 +26,7 @@ export const HomeHeader = () => {
     //     }
 
     // }, [])
-    const loggedInUser: any=useContext(AuthContext);
+    const {loggedInUser}: any=useContext(AuthContext);
     return (<>
 
         <Navbar fluid rounded className=" bg-slate-100 shadow-md px-3">

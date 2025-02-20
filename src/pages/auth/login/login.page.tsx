@@ -47,7 +47,7 @@ const LoginPage = () => {
   // }, [])
   
   //fetching loggedin user through context
-  const loggedInUser = useContext(AuthContext)  
+  const {loggedInUser,setLoggedInUser} = useContext(AuthContext)  
   useEffect(() => {
     if (loggedInUser) {
       toast.info("You are already logged in");
@@ -67,7 +67,8 @@ const LoginPage = () => {
       localStorage.setItem("refresh_token", response.result.refreshToken);
       
       toast.success(`Welcome ${response.result.userdetails.role} - ${response.result.userdetails.name}`)
-      navigate("/"+response.result.userdetails.role)
+      setLoggedInUser(response.result.userdetails)
+      navigate("/" + response.result.userdetails.role)
 
 
     } catch (exception: any) {
