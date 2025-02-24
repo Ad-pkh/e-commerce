@@ -17,6 +17,7 @@ import { AdminDashboard } from "../pages/dashboard";
 import CheckPermissions from "./rbac.config";
 import { UserRoleValue } from "./constant.config";
 import Errorpage from "../components/common/error/error.comonent";
+import { BannerCreatePage, BannerlistingPage } from "../pages/banner";
 
 const RouterConfig = () => {
     const [loggedInUser, setLoggedInUser] = useState();
@@ -65,23 +66,20 @@ const RouterConfig = () => {
                                     <Route path="contact" element={<Contact />} />
                                     <Route path="about" element={<>About</>} />
 
-                                    <Route path="*" element={<Errorpage url="/" label="homepage"  />} />
+                                    <Route
+                                        path="*"
+                                        element={<Errorpage url="/" label="homepage" />}
+                                    />
                                 </Route>
                                 {/* need to dbug here  allowed by type binding*/}
-                                <Route
-                                    path="/admin"
-                                    element={
-                                        <CheckPermissions
-                                            user={loggedInUser}
-                                            allowedby={UserRoleValue.ADMIN}
-                                        >
-                                            <AdminPageLayout />
-                                        </CheckPermissions>
-                                    }
-                                >
-                                        <Route index element={<AdminDashboard />}></Route>
-                                        <Route path="*" element={<Errorpage url="/admin" label="Dashboard"/>} />
-
+                                <Route path="/admin" element={<CheckPermissions user={loggedInUser} allowedby={UserRoleValue.ADMIN} >
+                                    <AdminPageLayout />
+                                    </CheckPermissions>}>
+                                    <Route index element={<AdminDashboard />} />
+                                    <Route path="banner" element={<BannerlistingPage />}/>
+                                    <Route path="banner/create" element={<BannerCreatePage />}/>
+                                    
+                                    <Route path="*" element={<Errorpage url="/admin" label="Dashboard" />} />
                                 </Route>
 
                                 <Route

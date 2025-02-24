@@ -1,4 +1,6 @@
-import { ReactElement, useEffect} from "react"//useState
+import {  ReactElement, useEffect} from "react"//useState
+import { HiPlus } from "react-icons/hi2"
+import { NavLink } from "react-router-dom"
 
 
 export const  Heading1=({children}:{children: ReactElement})=>{
@@ -11,6 +13,17 @@ export const  Heading1=({children}:{children: ReactElement})=>{
         </h1>
         </>
     )
+}
+export const HeadingwithLink = ({ title,link,btntxt }: { title: any,link:string ,btntxt:string}) => {
+    return (<>
+        <div className="flex justify-between">
+            <Heading1>{title}</Heading1>
+            <NavLink to={link} className="bg-teal-800 text-white flex items-center px-4 py-2 rounded gap-2">
+               <HiPlus/> {btntxt}
+            </NavLink>
+        </div>
+        
+    </>)
 }
 export const Heading2 =(props:{value?:string})=>{
     return(
